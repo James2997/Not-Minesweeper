@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private GridLayout mLightGrid;
     private int mLightOnColor;
     private int mLightOffColor;
-    private int mLightOnColorId =7;
+    private int mLightOnColorId = 120;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
