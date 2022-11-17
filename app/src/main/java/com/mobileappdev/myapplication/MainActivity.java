@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private LightsOutGame mGame;
     private GridLayout mLightGrid;
     private int mLightOnColor;
-    private int mLightOffColor;
+    private int mLightOffColor =4;
     private int mLightOnColorId =7;
 
     @Override
