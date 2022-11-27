@@ -8,7 +8,7 @@
     tools:context="com.mobileappdev.myapplication.MainActivity">
 
     <GridLayout
-        android:id="@+id/light_grid"
+        android:id="@+id/game_grid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:useDefaultMargins="true"
@@ -28,7 +28,7 @@
         android:onClick="onNewGameClick"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/light_grid" />
+        app:layout_constraintTop_toBottomOf="@id/game_grid" />
 
     <Button
         android:id="@+id/help_button"

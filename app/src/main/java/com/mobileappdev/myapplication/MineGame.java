@@ -2,26 +2,22 @@ package com.mobileappdev.myapplication;
 
 import java.util.Random;
 
-public class LightsOutGame {
-    public static final int GRID_SIZE = 3;
+public class MineGame {
+    public static final int GRID_WIDTH = 6, GRID_HEIGHT = 10;
 
     private final boolean[][] mLightsGrid;
 
-    public LightsOutGame() {
-        mLightsGrid = new boolean[GRID_SIZE][GRID_SIZE];
+    public MineGame() {
+        mLightsGrid = new boolean[GRID_WIDTH][GRID_HEIGHT];
     }
 
     public void newGame() {
         Random ran = new Random();
-        for(int i = 0; i < GRID_SIZE; i++) {
-            for(int j = 0; j < GRID_SIZE; j++) {
+        for(int i = 0; i < GRID_WIDTH; i++) {
+            for(int j = 0; j < GRID_HEIGHT; j++) {
                 mLightsGrid[i][j] = ran.nextBoolean();
             }
         }
-    }
-
-    public boolean isLightOn(int row, int col) {
-        return mLightsGrid[row][col];
     }
 
     public void selectLight(int row, int col) {
@@ -29,28 +25,20 @@ public class LightsOutGame {
         if (row > 0) {
             mLightsGrid[row - 1][col] = !mLightsGrid[row - 1][col];
         }
-        if (row < GRID_SIZE - 1) {
+        if (row < GRID_WIDTH - 1) {
             mLightsGrid[row + 1][col] = !mLightsGrid[row + 1][col];
         }
         if (col > 0) {
             mLightsGrid[row][col - 1] = !mLightsGrid[row][col - 1];
         }
-        if (col < GRID_SIZE - 1) {
+        if (col < GRID_HEIGHT - 1) {
             mLightsGrid[row][col + 1] = !mLightsGrid[row][col + 1];
         }
     }
 
-    public void cheat() {
-        for(int i = 0; i < GRID_SIZE; i++) {
-            for (int j = 0; j < GRID_SIZE; j++) {
-                mLightsGrid[i][j] = false;
-            }
-        }
-    }
-
     public boolean isGameOver() {
-        for(int i = 0; i < GRID_SIZE; i++) {
-            for (int j = 0; j < GRID_SIZE; j++) {
+        for(int i = 0; i < GRID_WIDTH; i++) {
+            for (int j = 0; j < GRID_HEIGHT; j++) {
                 if(mLightsGrid[i][j])
                     return false;
             }
@@ -60,8 +48,8 @@ public class LightsOutGame {
 
     public String getState() {
         StringBuilder board = new StringBuilder();
-        for(int i = 0; i < GRID_SIZE; i++) {
-            for (int j = 0; j < GRID_SIZE; j++) {
+        for(int i = 0; i < GRID_WIDTH; i++) {
+            for (int j = 0; j < GRID_HEIGHT; j++) {
                 char value = mLightsGrid[i][j] ? 'T' : 'F';
                 board.append(value);
             }
@@ -71,8 +59,8 @@ public class LightsOutGame {
 
     public void setState(String gameState) {
         int index = 0;
-        for(int i = 0; i < GRID_SIZE; i++) {
-            for (int j = 0; j < GRID_SIZE; j++) {
+        for(int i = 0; i < GRID_WIDTH; i++) {
+            for (int j = 0; j < GRID_HEIGHT; j++) {
                 mLightsGrid[i][j] = gameState.charAt(index) == 'T';
                 index++;
             }
