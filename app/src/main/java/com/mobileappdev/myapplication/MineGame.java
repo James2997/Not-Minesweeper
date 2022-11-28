@@ -3,7 +3,7 @@ package com.mobileappdev.myapplication;
 import java.util.Random;
 
 public class MineGame {
-    public static final int GRID_WIDTH = 6, GRID_HEIGHT = 10;
+    public static final int GRID_WIDTH = 10, GRID_HEIGHT = 10;
 
     private final boolean[][] mLightsGrid;
 

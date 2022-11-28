@@ -4,9 +4,9 @@
         <item name="colorPrimaryDark">@color/blue_700</item>
     </style>
 
-    <style name="LightButton">
-        <item name="android:layout_height">90dp</item>
-        <item name="android:layout_width">90dp</item>
+    <style name="MineButton">
+        <item name="android:layout_height">10dp</item>
+        <item name="android:layout_width">10dp</item>
     </style>
 
     <style name="GameOptionButton">

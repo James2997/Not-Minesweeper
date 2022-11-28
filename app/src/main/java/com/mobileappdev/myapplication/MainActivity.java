@@ -24,9 +24,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ActionBar.LayoutParams layout = new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layout.width = (int) ((270/ MineGame.GRID_WIDTH) * getResources().getDisplayMetrics().density + 0.2f);
-        layout.height = (int) ((270/ MineGame.GRID_HEIGHT) * getResources().getDisplayMetrics().density + 0.2f);
-        layout.setMargins(1, 1, 1, 1);
+        layout.width = (int) ((270/ MineGame.GRID_WIDTH) * getResources().getDisplayMetrics().density + 0.5f);
+        layout.height = (int) ((270/ MineGame.GRID_WIDTH) * getResources().getDisplayMetrics().density + 0.5f);
+        layout.setMargins(0, 0, 0, 0);
         mGameGrid = findViewById(R.id.game_grid);
         mGameGrid.setColumnCount(MineGame.GRID_WIDTH);
         mGameGrid.setRowCount(MineGame.GRID_HEIGHT);
