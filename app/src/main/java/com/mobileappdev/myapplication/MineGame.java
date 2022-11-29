@@ -5,6 +5,7 @@ import java.util.Random;
 public class MineGame {
     public static final int GRID_HEIGHT = 10, GRID_WIDTH = 10;
     public static final int totalBombs = 10;
+    public static int score = 0;
 
     private Tile[][] tileGrid;
 
@@ -90,6 +91,17 @@ public class MineGame {
     public boolean isTileRevealed(int row, int col){
         return tileGrid[row][col].isRevealed();
     }
+
+    public int getScore()
+    {
+        return score;
+    }
+
+    public void setScore(int a)
+    {
+        score += a;
+    }
+
 
 /*
     public void selectLight(int row, int col) {
