@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         mGame = new MineGame();
+        mGame.newGame();
     }
 
     private void startGame() {
@@ -67,18 +68,19 @@ public class MainActivity extends AppCompatActivity {
         int buttonIndex = mGameGrid.indexOfChild(view);
         int row = buttonIndex / MineGame.GRID_HEIGHT;
         int col = buttonIndex % MineGame.GRID_WIDTH;
+        int tileValue = mGame.getTileValue(row, col);
 
-//        mGame.selectLight(row, col);
-//
-//        if (mGame.isGameOver()) {
+//        if (mGame.isGameOver() || tileValue == -1) {
+//            revealGrid();
 //            Toast.makeText(this, R.string.congrats, Toast.LENGTH_SHORT).show();
 //        }
 
     }
 
     public void onHelpClick(View view) {
-        Intent intent = new Intent(this, HelpActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, HelpActivity.class);
+//        startActivity(intent);
+        revealGrid();
     }
 
     public void onNewGameClick(View view) {
@@ -86,6 +88,9 @@ public class MainActivity extends AppCompatActivity {
         revealGrid();
     }
 
+    public void revealTile(int tileValue, int buttonIndex) {
+
+    }
 
     public void revealGrid() {
         for (int buttonIndex = 0; buttonIndex < mGameGrid.getChildCount(); buttonIndex++) {
@@ -96,40 +101,34 @@ public class MainActivity extends AppCompatActivity {
             int row = buttonIndex % MineGame.GRID_HEIGHT;
 
             int tileValue = mGame.getTileValue(row, col);
-            switch (tileValue) {
-                case Tile.BOMB:
-                    gridButton.setImageBitmap(mSprites.get("bomb"));
-                    break;
-                case Tile.BLANK:
-                    gridButton.setImageBitmap(mSprites.get("empty"));
-                    break;
-                case 1:
-                    gridButton.setImageBitmap(mSprites.get("one"));
-                    break;
-                case 2:
-                    gridButton.setImageBitmap(mSprites.get("two"));
-                    break;
-                case 3:
-                    gridButton.setImageBitmap(mSprites.get("three"));
-                    break;
-                case 4:
-                    gridButton.setImageBitmap(mSprites.get("four"));
-                    break;
-                case 5:
-                    gridButton.setImageBitmap(mSprites.get("five"));
-                    break;
-                case 6:
-                    gridButton.setImageBitmap(mSprites.get("six"));
-                    break;
-                case 7:
-                    gridButton.setImageBitmap(mSprites.get("seven"));
-                    break;
-                case 8:
-                    gridButton.setImageBitmap(mSprites.get("eight"));
-                    break;
-                default: gridButton.setImageBitmap(mSprites.get("bomb_hit"));
-                    break;
-            }
+            gridButton.setImageBitmap(getImageFromValue(tileValue));
+        }
+    }
+
+    public Bitmap getImageFromValue(int tileValue) {
+        switch (tileValue) {
+            case Tile.Mine:
+                return mSprites.get("mine");
+            case Tile.BLANK:
+                return mSprites.get("empty");
+            case 1:
+                return mSprites.get("one");
+            case 2:
+                return mSprites.get("two");
+            case 3:
+                return mSprites.get("three");
+            case 4:
+                return mSprites.get("four");
+            case 5:
+                return mSprites.get("five");
+            case 6:
+                return mSprites.get("six");
+            case 7:
+                return mSprites.get("seven");
+            case 8:
+                return mSprites.get("eight");
+            default:
+                return mSprites.get("mine_hit");
         }
     }
 }
