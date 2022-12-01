@@ -1,7 +1,7 @@
 package com.mobileappdev.myapplication;
 
 public class Tile {
-    public static final int BOMB = -1;
+    public static final int Mine = -1;
     public static final int BLANK = 0;
 
     private boolean isRevealed;
