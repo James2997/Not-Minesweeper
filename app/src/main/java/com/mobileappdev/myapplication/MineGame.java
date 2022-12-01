@@ -7,6 +7,8 @@ public class MineGame {
     public static final int totalBombs = 15;
 
     private Tile[][] tileGrid;
+    private boolean gameWon, gameLost;
+    private int revealedTiles;
 
     public MineGame() {
         tileGrid = new Tile[GRID_HEIGHT][GRID_WIDTH];
@@ -14,6 +16,9 @@ public class MineGame {
 
     public void newGame() {
         tileGrid = makeBlankGrid(GRID_HEIGHT, GRID_WIDTH);
+        gameWon = false;
+        gameLost = false;
+        revealedTiles = 0;
         int minesPlaced = 0;
 
         while (minesPlaced < totalBombs){
@@ -64,7 +69,7 @@ public class MineGame {
 
                     grid[row][col].setValue(count);
                 }
-
+                grid[row][col].setRevealed(false);
             }
         }
         return grid;
@@ -90,8 +95,42 @@ public class MineGame {
         return tileGrid[row][col].isRevealed();
     }
 
-    public boolean isGameOver() {
+    public void setTileRevealed(int row, int col) {
+        if(!tileGrid[row][col].isRevealed()) {
+            tileGrid[row][col].setRevealed(true);
+            revealedTiles++;
+        }
 
+        if(revealedTiles == (GRID_HEIGHT * GRID_WIDTH) - totalBombs) {
+            gameWon = true;
+        }
+
+        if (tileGrid[row][col].getValue() == Tile.Mine){
+            tileGrid[row][col].setValue(-2);
+            gameLost = true;
+        }
+    }
+
+    public boolean setFlag(int row, int col) {
+        tileGrid[row][col].setFlagged(!tileGrid[row][col].isFlagged());
+        return tileGrid[row][col].isFlagged();
+    }
+
+    public boolean isFlagged(int row, int col) {
+        return tileGrid[row][col].isFlagged();
+    }
+
+    public boolean isGameOver() {
+        if(gameWon || gameLost)
+            return true;
         return false;
+    }
+
+    public boolean isGameWon() {
+        return gameWon;
+    }
+
+    public boolean isGameLost() {
+        return gameLost;
     }
 }

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -47,8 +48,7 @@ public class MainActivity extends AppCompatActivity {
         for (int buttonIndex = 0; buttonIndex < mGameGrid.getChildCount(); buttonIndex++) {
             ImageButton gridButton = (ImageButton) mGameGrid.getChildAt(buttonIndex);
             gridButton.setOnClickListener(this::onButtonClick);
-            if(buttonIndex == 0)
-                gridButton.setOnLongClickListener(this::onButtonLongClick);
+            gridButton.setOnLongClickListener(this::onButtonLongClick);
         }
 
         mGame = new MineGame();
@@ -60,21 +60,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean onButtonLongClick(View view) {
+        if(!mGame.isGameOver()) {
+            flag(view);
+        }
         return true;
     }
 
     private void onButtonClick(View view) {
+        if(!mGame.isGameOver()) {
+            revealTile(view);
+        }
 
-        int buttonIndex = mGameGrid.indexOfChild(view);
-        int row = buttonIndex / MineGame.GRID_HEIGHT;
-        int col = buttonIndex % MineGame.GRID_WIDTH;
-        int tileValue = mGame.getTileValue(row, col);
-
-//        if (mGame.isGameOver() || tileValue == -1) {
-//            revealGrid();
-//            Toast.makeText(this, R.string.congrats, Toast.LENGTH_SHORT).show();
-//        }
-
+        if(mGame.isGameWon()) {
+            Toast.makeText(this, R.string.congrats, Toast.LENGTH_SHORT).show();
+        } else if(mGame.isGameLost()) {
+            revealGrid();
+            Toast.makeText(this, R.string.nextTime, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void onHelpClick(View view) {
@@ -84,12 +86,39 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onNewGameClick(View view) {
+        hideGrid();
         startGame();
-        revealGrid();
+        //revealGrid();
     }
 
-    public void revealTile(int tileValue, int buttonIndex) {
+    //TODO: Add method to reveal adjacent blank tiles on blank tile click
+    public void revealTile(View view) {
+        int buttonIndex = mGameGrid.indexOfChild(view);
+        int row = buttonIndex / MineGame.GRID_HEIGHT;
+        int col = buttonIndex % MineGame.GRID_WIDTH;
 
+        if(!mGame.isFlagged(row, col)) {
+            int tileValue = mGame.getTileValue(row, col);
+            ImageButton gridButton = (ImageButton) mGameGrid.getChildAt(buttonIndex);
+            gridButton.setImageBitmap(getImageFromValue(tileValue));
+            mGame.setTileRevealed(row, col);
+        }
+    }
+
+    public void flag(View view) {
+        int buttonIndex = mGameGrid.indexOfChild(view);
+        int row = buttonIndex / MineGame.GRID_HEIGHT;
+        int col = buttonIndex % MineGame.GRID_WIDTH;
+
+        if(!mGame.isTileRevealed(row, col)) {
+            ImageButton gridButton = (ImageButton) mGameGrid.getChildAt(buttonIndex);
+
+            if(mGame.setFlag(row, col)) {
+                gridButton.setImageBitmap(mSprites.get("flag"));
+            } else {
+                gridButton.setImageBitmap(mSprites.get("unpressed"));
+            }
+        }
     }
 
     public void revealGrid() {
@@ -97,11 +126,18 @@ public class MainActivity extends AppCompatActivity {
             ImageButton gridButton = (ImageButton) mGameGrid.getChildAt(buttonIndex);
 
             //find the buttons row and col
-            int col = buttonIndex / MineGame.GRID_WIDTH;
-            int row = buttonIndex % MineGame.GRID_HEIGHT;
+            int row = buttonIndex / MineGame.GRID_HEIGHT;
+            int col = buttonIndex % MineGame.GRID_WIDTH;
 
             int tileValue = mGame.getTileValue(row, col);
             gridButton.setImageBitmap(getImageFromValue(tileValue));
+        }
+    }
+
+    public void hideGrid() {
+        for(int buttonIndex = 0; buttonIndex < mGameGrid.getChildCount(); buttonIndex++) {
+            ImageButton gridButton = (ImageButton) mGameGrid.getChildAt(buttonIndex);
+            gridButton.setImageBitmap(mSprites.get("unpressed"));
         }
     }
 

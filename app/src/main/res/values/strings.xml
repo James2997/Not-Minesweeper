@@ -2,6 +2,7 @@
     <string name="app_name">Not MineSweeper</string>
     <string name="new_game">New Game</string>
     <string name="congrats">Congratulations!</string>
+    <string name="nextTime">Try again next time!</string>
     <string name="help_instructions">Turn off all the lights to win!</string>
     <string name="light_bulb">Light bulb</string>
     <string name="help_button">Help</string>
