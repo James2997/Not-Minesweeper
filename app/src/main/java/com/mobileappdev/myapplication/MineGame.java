@@ -30,7 +30,6 @@ public class MineGame {
                 minesPlaced++;
             }
         }
-
         tileGrid = calcNeighborBombs(tileGrid);
     }
 

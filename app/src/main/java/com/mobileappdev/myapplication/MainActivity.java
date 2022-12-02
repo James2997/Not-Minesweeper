@@ -1,7 +1,6 @@
 package com.mobileappdev.myapplication;
 
 import android.app.ActionBar;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -80,18 +79,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onHelpClick(View view) {
-//        Intent intent = new Intent(this, HelpActivity.class);
-//        startActivity(intent);
         revealGrid();
     }
 
     public void onNewGameClick(View view) {
         hideGrid();
         startGame();
-        //revealGrid();
     }
 
-    //TODO: Add method to reveal adjacent blank tiles on blank tile click
     public void revealTile(View view) {
         int buttonIndex = mGameGrid.indexOfChild(view);
         int row = buttonIndex / MineGame.GRID_HEIGHT;
@@ -99,12 +94,34 @@ public class MainActivity extends AppCompatActivity {
 
         if(!mGame.isFlagged(row, col)) {
             int tileValue = mGame.getTileValue(row, col);
-            ImageButton gridButton = (ImageButton) mGameGrid.getChildAt(buttonIndex);
-            gridButton.setImageBitmap(getImageFromValue(tileValue));
-            mGame.setTileRevealed(row, col);
+            if(tileValue == 0) {
+                ImageButton gridButton = (ImageButton) mGameGrid.getChildAt(buttonIndex);
+                gridButton.setImageBitmap(getImageFromValue(tileValue));
+                mGame.setTileRevealed(row, col);
+
+                for(int i = -1; i <= 1; i++) {
+                    for(int j = -1; j <= 1; j++) {
+                        if(!(i == 0 && j == 0)) {
+                            int nRow = row + i;
+                            int nCol = col + j;
+                            if((nRow >= 0 && nCol >= 0) && (nRow < MineGame.GRID_HEIGHT && nCol < MineGame.GRID_WIDTH)) {
+                                if(!mGame.isTileRevealed(nRow, nCol)) {
+                                    revealTile(getButtonAt(nRow, nCol));
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                ImageButton gridButton = (ImageButton) mGameGrid.getChildAt(buttonIndex);
+                gridButton.setImageBitmap(getImageFromValue(tileValue));
+                mGame.setTileRevealed(row, col);
+            }
         }
     }
 
+    //Sets given ImageButton to a flag image
+    //This makes the button non-clickable
     public void flag(View view) {
         int buttonIndex = mGameGrid.indexOfChild(view);
         int row = buttonIndex / MineGame.GRID_HEIGHT;
@@ -121,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //Reveals the entire board
     public void revealGrid() {
         for (int buttonIndex = 0; buttonIndex < mGameGrid.getChildCount(); buttonIndex++) {
             ImageButton gridButton = (ImageButton) mGameGrid.getChildAt(buttonIndex);
@@ -134,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //Iterates through all ImageButtons, and sets them to their default state
     public void hideGrid() {
         for(int buttonIndex = 0; buttonIndex < mGameGrid.getChildCount(); buttonIndex++) {
             ImageButton gridButton = (ImageButton) mGameGrid.getChildAt(buttonIndex);
@@ -141,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //Returns Bitmap image for given tile
     public Bitmap getImageFromValue(int tileValue) {
         switch (tileValue) {
             case Tile.Mine:
@@ -166,5 +186,11 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return mSprites.get("mine_hit");
         }
+    }
+
+    //Returns ImageButton view when given it's row and column
+    public View getButtonAt(int row, int col) {
+        int index = (row * MineGame.GRID_WIDTH) + col;
+        return mGameGrid.getChildAt(index);
     }
 }
