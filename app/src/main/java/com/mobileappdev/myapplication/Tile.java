@@ -18,6 +18,10 @@ public class Tile {
         return isRevealed;
     }
 
+    public boolean isHidden() {
+        return !isRevealed;
+    }
+
     public void setRevealed(boolean revealed) {
         isRevealed = revealed;
     }

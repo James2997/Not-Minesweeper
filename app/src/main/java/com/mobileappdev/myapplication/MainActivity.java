@@ -10,9 +10,7 @@ import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private HashMap<String, Bitmap> mSprites;
     private MineGame mGame;
     private GridLayout mGameGrid;
+    private boolean isCheating = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,21 +54,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startGame() {
+        isCheating = false;
         mGame.newGame();
     }
 
     private boolean onButtonLongClick(View view) {
-        if(!mGame.isGameOver()) {
-            flag(view);
+        if(mGame.isGameOver()) {
+            return true;
         }
+        flag(view);
         return true;
     }
 
     private void onButtonClick(View view) {
-        if(!mGame.isGameOver()) {
-            revealTile(view);
+        if(mGame.isGameOver()) {
+            return;
         }
 
+        revealTile(view);
         if(mGame.isGameWon()) {
             Toast.makeText(this, R.string.congrats, Toast.LENGTH_SHORT).show();
         } else if(mGame.isGameLost()) {
@@ -78,8 +80,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void onHelpClick(View view) {
-        revealGrid();
+    public void onCheatClick(View view) {
+        cheat();
     }
 
     public void onNewGameClick(View view) {
@@ -105,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                             int nRow = row + i;
                             int nCol = col + j;
                             if((nRow >= 0 && nCol >= 0) && (nRow < MineGame.GRID_HEIGHT && nCol < MineGame.GRID_WIDTH)) {
-                                if(!mGame.isTileRevealed(nRow, nCol)) {
+                                if(mGame.isTileHidden(nRow, nCol)) {
                                     revealTile(getButtonAt(nRow, nCol));
                                 }
                             }
@@ -127,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         int row = buttonIndex / MineGame.GRID_HEIGHT;
         int col = buttonIndex % MineGame.GRID_WIDTH;
 
-        if(!mGame.isTileRevealed(row, col)) {
+        if(mGame.isTileHidden(row, col)) {
             ImageButton gridButton = (ImageButton) mGameGrid.getChildAt(buttonIndex);
 
             if(mGame.setFlag(row, col)) {
@@ -150,6 +152,34 @@ public class MainActivity extends AppCompatActivity {
             int tileValue = mGame.getTileValue(row, col);
             gridButton.setImageBitmap(getImageFromValue(tileValue));
         }
+    }
+
+    public void cheat() {
+        for (int buttonIndex = 0; buttonIndex < mGameGrid.getChildCount(); buttonIndex++) {
+            ImageButton gridButton = (ImageButton) mGameGrid.getChildAt(buttonIndex);
+            int row = buttonIndex / MineGame.GRID_HEIGHT;
+            int col = buttonIndex % MineGame.GRID_WIDTH;
+            int tileValue = mGame.getTileValue(row, col);
+
+            if(isCheating) {
+                if(mGame.isTileHidden(row, col)) {
+                    if(mGame.isFlagged(row, col)) {
+                        gridButton.setImageBitmap(mSprites.get("flag"));
+                    } else {
+                        gridButton.setImageBitmap(mSprites.get("unpressed"));
+                    }
+                } else {
+                    gridButton.setImageBitmap(getImageFromValue(tileValue));
+                }
+            } else {
+                if(mGame.isFlagged(row, col)) {
+                    gridButton.setImageBitmap(mSprites.get("flag"));
+                } else {
+                    gridButton.setImageBitmap(getImageFromValue(tileValue));
+                }
+            }
+        }
+        isCheating = !isCheating;
     }
 
     //Iterates through all ImageButtons, and sets them to their default state
