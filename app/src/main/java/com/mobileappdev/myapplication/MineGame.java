@@ -4,10 +4,12 @@ import java.util.Random;
 
 public class MineGame {
     public static final int GRID_HEIGHT = 10, GRID_WIDTH = 10;
-    public static final int totalBombs = 10;
+    public static final int totalMines = 15;
     public static int score = 0;
 
     private Tile[][] tileGrid;
+    private boolean gameWon, gameLost;
+    private int revealedTiles;
 
     public MineGame() {
         tileGrid = new Tile[GRID_HEIGHT][GRID_WIDTH];
@@ -15,23 +17,20 @@ public class MineGame {
 
     // x and y parameters represent the coordinates of the first clicked tile
     public void newGame(int x, int y) {
+        gameLost = false;
+        gameWon = false;
         tileGrid = makeBlankGrid(GRID_HEIGHT, GRID_WIDTH);
         int minesPlaced = 0;
 
-        while (minesPlaced < totalBombs){
+        while (minesPlaced < totalMines){
             int row = new Random().nextInt(GRID_HEIGHT);
             int col = new Random().nextInt(GRID_WIDTH);
 
             if(tileGrid[row][col].getValue() == Tile.BLANK){
-<<<<<<< Updated upstream
-                tileGrid[row][col].setValue(Tile.BOMB);
-                minesPlaced++;
-=======
                 if(!(row == x && col == y)) {           //prevents first tile clicked from being a mine
                     tileGrid[row][col].setValue(Tile.Mine);
                     minesPlaced++;
                 }
->>>>>>> Stashed changes
             }
         }
 
@@ -46,29 +45,29 @@ public class MineGame {
         for (int row = 0; row < GRID_HEIGHT; row++) {
             for (int col = 0; col < GRID_WIDTH; col++) {
                 int count = 0;
-                if (grid[row][col].getValue() != Tile.BOMB) { // skip if index is a bomb
-                    if ((row > 0) && (col > 0) && (grid[row - 1][col - 1].getValue() == Tile.BOMB)) { // up-left
+                if (grid[row][col].getValue() != Tile.Mine) { // skip if index is a bomb
+                    if ((row > 0) && (col > 0) && (grid[row - 1][col - 1].getValue() == Tile.Mine)) { // up-left
                         count++;
                     }
-                    if (col > 0 && grid[row][col - 1].getValue() == Tile.BOMB) { // up
+                    if (col > 0 && grid[row][col - 1].getValue() == Tile.Mine) { // up
                         count++;
                     }
-                    if (col < GRID_WIDTH - 1 && grid[row][col + 1].getValue() == Tile.BOMB) { // down
+                    if (col < GRID_WIDTH - 1 && grid[row][col + 1].getValue() == Tile.Mine) { // down
                         count++;
                     }
-                    if (row < GRID_HEIGHT - 1 && col > 0 && grid[row + 1][col - 1].getValue() == Tile.BOMB) { // up-right
+                    if (row < GRID_HEIGHT - 1 && col > 0 && grid[row + 1][col - 1].getValue() == Tile.Mine) { // up-right
                         count++;
                     }
-                    if (row > 0 && grid[row - 1][col].getValue() == Tile.BOMB) { // left
+                    if (row > 0 && grid[row - 1][col].getValue() == Tile.Mine) { // left
                         count++;
                     }
-                    if (row > 0 && col < GRID_WIDTH - 1 && grid[row - 1][col + 1].getValue() == Tile.BOMB) { // down-left
+                    if (row > 0 && col < GRID_WIDTH - 1 && grid[row - 1][col + 1].getValue() == Tile.Mine) { // down-left
                         count++;
                     }
-                    if (row < GRID_HEIGHT - 1 && col < GRID_WIDTH - 1 && grid[row + 1][col + 1].getValue() == Tile.BOMB) {// down-right
+                    if (row < GRID_HEIGHT - 1 && col < GRID_WIDTH - 1 && grid[row + 1][col + 1].getValue() == Tile.Mine) {// down-right
                         count++;
                     }
-                    if (row < GRID_HEIGHT - 1 && grid[row + 1][col].getValue() == Tile.BOMB) { // right
+                    if (row < GRID_HEIGHT - 1 && grid[row + 1][col].getValue() == Tile.Mine) { // right
                         count++;
                     }
 
@@ -147,14 +146,41 @@ public class MineGame {
         return tileGrid[row][col].isRevealed();
     }
 
-    public int getScore()
-    {
-        return score;
+    public void setTileRevealed(int row, int col) {
+        if(tileGrid[row][col].isRevealed()) {
+            tileGrid[row][col].setRevealed(true);
+            revealedTiles++;
+        }
+
+        if(revealedTiles == (GRID_HEIGHT * GRID_WIDTH) - totalMines) {
+            gameWon = true;
+        }
+
+        if (tileGrid[row][col].getValue() == Tile.Mine){
+            tileGrid[row][col].setValue(-2);
+            gameLost = true;
+        }
     }
 
-    public void setScore(int a)
-    {
-        score += a;
+    public boolean setFlag(int row, int col) {
+        tileGrid[row][col].setFlagged(!tileGrid[row][col].isFlagged());
+        return tileGrid[row][col].isFlagged();
+    }
+
+    public boolean isFlagged(int row, int col) {
+        return tileGrid[row][col].isFlagged();
+    }
+
+    public boolean isGameOver() {
+        return gameWon || gameLost;
+    }
+
+    public boolean isGameWon() {
+        return gameWon;
+    }
+
+    public boolean isGameLost() {
+        return gameLost;
     }
 
 

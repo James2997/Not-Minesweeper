@@ -22,11 +22,11 @@ public class ImageProcessing {
         sprites.put("seven",    Bitmap.createBitmap(original, width * 3,height * 1, width, height));
         sprites.put("eight",    Bitmap.createBitmap(original, width * 0,height * 2, width, height));
         sprites.put("unpressed",Bitmap.createBitmap(original, width * 1,height * 2, width, height));
-        sprites.put("bomb_hit", Bitmap.createBitmap(original, width * 2,height * 2, width, height));
+        sprites.put("mine_hit", Bitmap.createBitmap(original, width * 2,height * 2, width, height));
         sprites.put("flag",     Bitmap.createBitmap(original, width * 3,height * 2, width, height));
         sprites.put("not_bomb", Bitmap.createBitmap(original, width * 0,height * 3, width, height));
         sprites.put("question", Bitmap.createBitmap(original, width * 1,height * 3, width, height));
-        sprites.put("bomb",     Bitmap.createBitmap(original, width * 2,height * 3, width, height));
+        sprites.put("mine",     Bitmap.createBitmap(original, width * 2,height * 3, width, height));
 
         return sprites;
     }
