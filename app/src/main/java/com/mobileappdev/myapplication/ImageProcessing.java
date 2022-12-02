@@ -1,13 +1,12 @@
 package com.mobileappdev.myapplication;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
 import java.util.HashMap;
 
+@SuppressWarnings({"all"})
 public class ImageProcessing {
     public static HashMap<String, Bitmap> processSprites(Bitmap original) {
-        HashMap<String, Bitmap> sprites = new HashMap<String, Bitmap>();
+        HashMap<String, Bitmap> sprites = new HashMap();
 
         int height = original.getHeight()/4;
         int width = original.getWidth()/4;
