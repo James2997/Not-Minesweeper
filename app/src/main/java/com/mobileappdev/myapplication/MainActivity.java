@@ -1,7 +1,6 @@
 package com.mobileappdev.myapplication;
 
 import android.app.ActionBar;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -20,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private HashMap<String, Bitmap> mSprites;
     private MineGame mGame;
     private GridLayout mGameGrid;
+    private boolean firstClick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +52,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         mGame = new MineGame();
-        mGame.newGame();
+        startGame();
+       // mGame.newGame();
     }
 
     private void startGame() {
-        mGame.newGame();
+        firstClick = true;
     }
 
     private boolean onButtonLongClick(View view) {
@@ -64,6 +65,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onButtonClick(View view) {
+<<<<<<< Updated upstream
+=======
+        if(firstClick){
+            int buttonIndex = mGameGrid.indexOfChild(view);
+            int row = buttonIndex / MineGame.GRID_HEIGHT;
+            int col = buttonIndex % MineGame.GRID_WIDTH;
+
+            mGame.newGame(row ,col);
+            revealTile(view);
+            showAdjacentBlanks();
+            firstClick = false;
+        } else if
+        (!mGame.isGameOver()) {
+            revealTile(view);
+            showAdjacentBlanks();
+        }
+>>>>>>> Stashed changes
 
         int buttonIndex = mGameGrid.indexOfChild(view);
         int row = buttonIndex / MineGame.GRID_HEIGHT;
@@ -103,6 +121,56 @@ public class MainActivity extends AppCompatActivity {
         //revealGrid();
     }
 
+<<<<<<< Updated upstream
+=======
+    //TODO: Add method to reveal adjacent blank tiles on blank tile click
+    public void revealTile(View view) {
+        int buttonIndex = mGameGrid.indexOfChild(view);
+        int row = buttonIndex / MineGame.GRID_HEIGHT;
+        int col = buttonIndex % MineGame.GRID_WIDTH;
+
+        if(!mGame.isFlagged(row, col)) {
+            int tileValue = mGame.getTileValue(row, col);
+            ImageButton gridButton = (ImageButton) mGameGrid.getChildAt(buttonIndex);
+            gridButton.setImageBitmap(getImageFromValue(tileValue));
+
+            if(tileValue == Tile.BLANK)
+                mGame.revealAdjacentBlanks(row, col);
+
+            mGame.setTileRevealed(row, col);
+        }
+    }
+
+    public void showAdjacentBlanks() {
+        for (int buttonIndex = 0; buttonIndex < mGameGrid.getChildCount(); buttonIndex++) {
+            ImageButton gridButton = (ImageButton) mGameGrid.getChildAt(buttonIndex);
+
+            //find the buttons row and col
+            int row = buttonIndex / MineGame.GRID_HEIGHT;
+            int col = buttonIndex % MineGame.GRID_WIDTH;
+
+            int tileValue = mGame.getTileValue(row, col);
+            if(mGame.isTileRevealed(row, col) == true)
+                gridButton.setImageBitmap(getImageFromValue(tileValue));
+        }
+    }
+
+    public void flag(View view) {
+        int buttonIndex = mGameGrid.indexOfChild(view);
+        int row = buttonIndex / MineGame.GRID_HEIGHT;
+        int col = buttonIndex % MineGame.GRID_WIDTH;
+
+        if(!mGame.isTileRevealed(row, col)) {
+            ImageButton gridButton = (ImageButton) mGameGrid.getChildAt(buttonIndex);
+
+            if(mGame.setFlag(row, col)) {
+                gridButton.setImageBitmap(mSprites.get("flag"));
+            } else {
+                gridButton.setImageBitmap(mSprites.get("unpressed"));
+            }
+        }
+    }
+>>>>>>> Stashed changes
 
     public void revealGrid() {
         for (int buttonIndex = 0; buttonIndex < mGameGrid.getChildCount(); buttonIndex++) {

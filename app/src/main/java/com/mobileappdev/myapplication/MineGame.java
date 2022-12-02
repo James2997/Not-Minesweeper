@@ -13,7 +13,8 @@ public class MineGame {
         tileGrid = new Tile[GRID_HEIGHT][GRID_WIDTH];
     }
 
-    public void newGame() {
+    // x and y parameters represent the coordinates of the first clicked tile
+    public void newGame(int x, int y) {
         tileGrid = makeBlankGrid(GRID_HEIGHT, GRID_WIDTH);
         int minesPlaced = 0;
 
@@ -22,8 +23,15 @@ public class MineGame {
             int col = new Random().nextInt(GRID_WIDTH);
 
             if(tileGrid[row][col].getValue() == Tile.BLANK){
+<<<<<<< Updated upstream
                 tileGrid[row][col].setValue(Tile.BOMB);
                 minesPlaced++;
+=======
+                if(!(row == x && col == y)) {           //prevents first tile clicked from being a mine
+                    tileGrid[row][col].setValue(Tile.Mine);
+                    minesPlaced++;
+                }
+>>>>>>> Stashed changes
             }
         }
 
@@ -82,6 +90,53 @@ public class MineGame {
             }
         }
         return grid;
+    }
+
+    public void revealAdjacentBlanks(int row, int col){
+        if (row < 0 || row > GRID_HEIGHT -1 || col < 0 || col > GRID_WIDTH - 1)
+            return;
+
+        if (tileGrid[row][col].getValue() == Tile.Mine || tileGrid[row][col].isRevealed() == true)
+            return;
+
+        if (tileGrid[row][col].getValue() == Tile.BLANK) {
+            tileGrid[row][col].setRevealed(true);
+
+            revealAdjacentBlanks(row, col - 1);
+            revealAdjacentBlanks(row, col + 1);
+            revealAdjacentBlanks(row - 1, col);
+            revealAdjacentBlanks(row + 1, col);
+            revealAdjacentBlanks(row + 1, col + 1);
+            revealAdjacentBlanks(row - 1, col - 1);
+            revealAdjacentBlanks(row + 1, col - 1);
+            revealAdjacentBlanks(row - 1, col + 1);
+
+            // if statements used to reveal the number tiles that surround blank tiles
+            if ((row > 0) && (col > 0) && (tileGrid[row - 1][col - 1].getValue() != Tile.Mine)) { // up-left
+                tileGrid[row -1][col -1].setRevealed(true);
+            }
+            if (col > 0 && tileGrid[row][col - 1].getValue() != Tile.Mine) { // up
+                tileGrid[row][col - 1].setRevealed(true);
+            }
+            if (col < GRID_WIDTH - 1 && tileGrid[row][col + 1].getValue() != Tile.Mine) { // down
+                tileGrid[row][col + 1].setRevealed(true);
+            }
+            if (row < GRID_HEIGHT - 1 && col > 0 && tileGrid[row + 1][col - 1].getValue() != Tile.Mine) { // up-right
+                tileGrid[row + 1][col - 1].setRevealed(true);
+            }
+            if (row > 0 && tileGrid[row - 1][col].getValue() == Tile.Mine) { // left
+                tileGrid[row - 1][col].setRevealed(true);
+            }
+            if (row > 0 && col < GRID_WIDTH - 1 && tileGrid[row - 1][col + 1].getValue() != Tile.Mine) { // down-left
+                tileGrid[row - 1][col + 1].setRevealed(true);
+            }
+            if (row < GRID_HEIGHT - 1 && col < GRID_WIDTH - 1 && tileGrid[row + 1][col + 1].getValue() != Tile.Mine) {// down-right
+                tileGrid[row + 1][col + 1].setRevealed(true);
+            }
+            if (row < GRID_HEIGHT - 1 && tileGrid[row + 1][col].getValue() != Tile.Mine) { // right
+                tileGrid[row + 1][col].setRevealed(true);
+            }
+        }
     }
 
     public int getTileValue(int row, int col){
