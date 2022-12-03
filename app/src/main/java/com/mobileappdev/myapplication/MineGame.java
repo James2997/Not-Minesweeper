@@ -9,7 +9,6 @@ public class MineGame {
 
     private Tile[][] tileGrid;
     private boolean gameWon, gameLost;
-    private int revealedTiles;
 
     public MineGame() {
         tileGrid = new Tile[GRID_HEIGHT][GRID_WIDTH];
@@ -33,9 +32,7 @@ public class MineGame {
                 }
             }
         }
-
         tileGrid = calcNeighborBombs(tileGrid);
-
     }
 
 
@@ -138,6 +135,17 @@ public class MineGame {
         }
     }
 
+    public int countRevealedTiles(){
+        int count = 0;
+        for (int row = 0; row < GRID_HEIGHT; row++) {
+            for (int col = 0; col < GRID_WIDTH; col++) {
+                if (tileGrid[row][col].isRevealed())
+                    count++;
+            }
+        }
+        return count;
+    }
+
     public int getTileValue(int row, int col){
         return tileGrid[row][col].getValue();
     }
@@ -149,10 +157,9 @@ public class MineGame {
     public void setTileRevealed(int row, int col) {
         if(tileGrid[row][col].isRevealed()) {
             tileGrid[row][col].setRevealed(true);
-            revealedTiles++;
         }
 
-        if(revealedTiles == (GRID_HEIGHT * GRID_WIDTH) - totalMines) {
+        if(countRevealedTiles() == (GRID_HEIGHT * GRID_WIDTH) - totalMines) {
             gameWon = true;
         }
 
@@ -176,62 +183,13 @@ public class MineGame {
     }
 
     public boolean isGameWon() {
+        if(countRevealedTiles() == (GRID_HEIGHT * GRID_WIDTH) - totalMines) {
+            gameWon = true;
+       }
         return gameWon;
     }
 
     public boolean isGameLost() {
         return gameLost;
     }
-
-
-/*
-    public void selectLight(int row, int col) {
-        mLightsGrid[row][col] = !mLightsGrid[row][col];
-        if (row > 0) {
-            mLightsGrid[row - 1][col] = !mLightsGrid[row - 1][col];
-        }
-        if (row < GRID_WIDTH - 1) {
-            mLightsGrid[row + 1][col] = !mLightsGrid[row + 1][col];
-        }
-        if (col > 0) {
-            mLightsGrid[row][col - 1] = !mLightsGrid[row][col - 1];
-        }
-        if (col < GRID_HEIGHT - 1) {
-            mLightsGrid[row][col + 1] = !mLightsGrid[row][col + 1];
-        }
-    }
-
-    public boolean isGameOver() {
-        for(int i = 0; i < GRID_WIDTH; i++) {
-            for (int j = 0; j < GRID_HEIGHT; j++) {
-                if(mLightsGrid[i][j])
-                    return false;
-            }
-        }
-        return true;
-    }
-
-    public String getState() {
-        StringBuilder board = new StringBuilder();
-        for(int i = 0; i < GRID_WIDTH; i++) {
-            for (int j = 0; j < GRID_HEIGHT; j++) {
-                char value = mLightsGrid[i][j] ? 'T' : 'F';
-                board.append(value);
-            }
-        }
-        return board.toString();
-    }
-
-    public void setState(String gameState) {
-        int index = 0;
-        for(int i = 0; i < GRID_WIDTH; i++) {
-            for (int j = 0; j < GRID_HEIGHT; j++) {
-                mLightsGrid[i][j] = gameState.charAt(index) == 'T';
-                index++;
-            }
-        }
-    }
- */
-
-
 }

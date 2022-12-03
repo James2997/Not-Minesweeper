@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
 
         mGame = new MineGame();
         startGame();
-        // mGame.newGame();
     }
 
     private void startGame() {
@@ -76,12 +75,12 @@ public class MainActivity extends AppCompatActivity {
 
             mGame.newGame(row ,col);
             revealTile(view);
-            showAdjacentBlanks();
+            showAllRevealedTiles();
             firstClick = false;
         } else if
         (!mGame.isGameOver()) {
             revealTile(view);
-            showAdjacentBlanks();
+            showAllRevealedTiles();
         }
 
         if(mGame.isGameWon()) {
@@ -94,8 +93,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onHelpClick(View view) {
-//        Intent intent = new Intent(this, HelpActivity.class);
-//        startActivity(intent);
         revealGrid();
     }
 
@@ -103,11 +100,8 @@ public class MainActivity extends AppCompatActivity {
     public void onNewGameClick(View view) {
         hideGrid();
         startGame();
-        //revealGrid();
     }
 
-
-    //TODO: Add method to reveal adjacent blank tiles on blank tile click
     public void revealTile(View view) {
         int buttonIndex = mGameGrid.indexOfChild(view);
         int row = buttonIndex / MineGame.GRID_HEIGHT;
@@ -125,7 +119,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void showAdjacentBlanks() {
+    //updates grid to show all tiles that have been revealed so far
+    public void showAllRevealedTiles() {
         for (int buttonIndex = 0; buttonIndex < mGameGrid.getChildCount(); buttonIndex++) {
             ImageButton gridButton = (ImageButton) mGameGrid.getChildAt(buttonIndex);
 
@@ -174,7 +169,6 @@ public class MainActivity extends AppCompatActivity {
             gridButton.setImageBitmap(mSprites.get("unpressed"));
         }
     }
-
 
     public Bitmap getImageFromValue(int tileValue) {
         switch (tileValue) {
