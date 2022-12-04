@@ -12,27 +12,28 @@ public class MineGame {
         tileGrid = new Tile[GRID_HEIGHT][GRID_WIDTH];
     }
 
-    public void newGame() {
-        tileGrid = makeBlankGrid(GRID_HEIGHT, GRID_WIDTH);
+    public void newGame(int x, int y) {
+        gameWon = false;
+        gameLost = false;
+        revealedTiles = 0;
+        tileGrid = setGrid(x, y);
+    }
+
+
+    // iterates through array and counts surrounding bombs
+    private static Tile[][] setGrid(int x, int y){
+        Tile[][] grid = makeBlankGrid();
         int minesPlaced = 0;
 
         while (minesPlaced < totalBombs){
             int row = new Random().nextInt(GRID_HEIGHT);
             int col = new Random().nextInt(GRID_WIDTH);
 
-            if(tileGrid[row][col].getValue() == Tile.BLANK){
-                tileGrid[row][col].setValue(Tile.BOMB);
+            if(grid[row][col].getValue() == Tile.BLANK && (row != x && col != y)){
+                grid[row][col].setValue(Tile.Mine);
                 minesPlaced++;
             }
         }
-
-        tileGrid = calcNeighborBombs(tileGrid);
-
-    }
-
-
-    // iterates through array and counts surrounding bombs
-    private static Tile[][] calcNeighborBombs(Tile[][] grid){
 
         for (int row = 0; row < GRID_HEIGHT; row++) {
             for (int col = 0; col < GRID_WIDTH; col++) {
@@ -73,10 +74,10 @@ public class MineGame {
 
 
     // returns a 2d Tile array with all indexes(tiles) set to blank
-    public Tile[][] makeBlankGrid(int width, int height){
-        Tile[][] grid = new Tile[width][height];
-        for (int i = 0; i < width; i++){
-            for (int j = 0; j < height; j++){
+    private static Tile[][] makeBlankGrid(){
+        Tile[][] grid = new Tile[GRID_WIDTH][GRID_HEIGHT];
+        for (int i = 0; i < GRID_WIDTH; i++){
+            for (int j = 0; j < GRID_HEIGHT; j++){
                 grid[i][j] = new Tile(Tile.BLANK);
             }
         }
@@ -87,15 +88,14 @@ public class MineGame {
         return tileGrid[row][col].getValue();
     }
 
-    public boolean isTileRevealed(int row, int col){
-        return tileGrid[row][col].isRevealed();
+    public boolean isTileHidden(int row, int col){
+        return tileGrid[row][col].isHidden();
     }
 
-/*
-    public void selectLight(int row, int col) {
-        mLightsGrid[row][col] = !mLightsGrid[row][col];
-        if (row > 0) {
-            mLightsGrid[row - 1][col] = !mLightsGrid[row - 1][col];
+    public void setTileRevealed(int row, int col) {
+        if(tileGrid[row][col].isHidden()) {
+            tileGrid[row][col].setRevealed(true);
+            revealedTiles++;
         }
         if (row < GRID_WIDTH - 1) {
             mLightsGrid[row + 1][col] = !mLightsGrid[row + 1][col];
@@ -129,14 +129,8 @@ public class MineGame {
         return board.toString();
     }
 
-    public void setState(String gameState) {
-        int index = 0;
-        for(int i = 0; i < GRID_WIDTH; i++) {
-            for (int j = 0; j < GRID_HEIGHT; j++) {
-                mLightsGrid[i][j] = gameState.charAt(index) == 'T';
-                index++;
-            }
-        }
+    public boolean isGameOver() {
+        return gameWon || gameLost;
     }
  */
 

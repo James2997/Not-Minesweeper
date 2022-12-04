@@ -14,8 +14,13 @@ public class Tile {
         this.isFlagged = false;
     }
 
+    @SuppressWarnings({"unused"})
     public boolean isRevealed() {
         return isRevealed;
+    }
+
+    public boolean isHidden() {
+        return !isRevealed;
     }
 
     public void setRevealed(boolean revealed) {
