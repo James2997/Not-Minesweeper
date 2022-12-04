@@ -14,16 +14,16 @@ public class MineGame {
         tileGrid = new Tile[GRID_HEIGHT][GRID_WIDTH];
     }
 
-    public void newGame() {
+    public void newGame(int x, int y) {
         gameWon = false;
         gameLost = false;
         revealedTiles = 0;
-        tileGrid = setGrid();
+        tileGrid = setGrid(x, y);
     }
 
 
     // iterates through array and counts surrounding bombs
-    private static Tile[][] setGrid(){
+    private static Tile[][] setGrid(int x, int y){
         Tile[][] grid = makeBlankGrid();
         int minesPlaced = 0;
 
@@ -31,7 +31,7 @@ public class MineGame {
             int row = new Random().nextInt(GRID_HEIGHT);
             int col = new Random().nextInt(GRID_WIDTH);
 
-            if(grid[row][col].getValue() == Tile.BLANK){
+            if(grid[row][col].getValue() == Tile.BLANK && (row != x && col != y)){
                 grid[row][col].setValue(Tile.Mine);
                 minesPlaced++;
             }

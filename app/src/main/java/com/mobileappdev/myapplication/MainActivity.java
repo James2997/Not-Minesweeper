@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private HashMap<String, Bitmap> mSprites;
     private MineGame mGame;
     private GridLayout mGameGrid;
-    private boolean isCheating = false;
+    private boolean isCheating = false, firstClick = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +50,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         mGame = new MineGame();
-        mGame.newGame();
+        startGame();
     }
 
     private void startGame() {
         isCheating = false;
-        mGame.newGame();
+        firstClick = true;
     }
 
     private boolean onButtonLongClick(View view) {
@@ -71,7 +71,18 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        revealTile(view);
+        if(firstClick) {
+            int buttonIndex = mGameGrid.indexOfChild(view);
+            int row = buttonIndex / MineGame.GRID_HEIGHT;
+            int col = buttonIndex % MineGame.GRID_WIDTH;
+
+            mGame.newGame(row, col);
+            revealTile(view);
+            firstClick = false;
+        } else {
+            revealTile(view);
+        }
+
         if(mGame.isGameWon()) {
             Toast.makeText(this, R.string.congrats, Toast.LENGTH_SHORT).show();
         } else if(mGame.isGameLost()) {
@@ -81,7 +92,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onCheatClick(View view) {
-        cheat();
+        if(!firstClick) {
+            cheat();
+        }
     }
 
     public void onNewGameClick(View view) {
