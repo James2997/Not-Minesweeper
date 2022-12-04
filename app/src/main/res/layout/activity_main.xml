@@ -33,8 +33,8 @@
     <Button
         android:id="@+id/help_button"
         style="@style/GameOptionButton"
-        android:text="@string/cheat_button"
-        android:onClick="onCheatClick"
+        android:text="@string/help_button"
+        android:onClick="onHelpClick"
         app:layout_constraintLeft_toLeftOf="@id/new_game_button"
         app:layout_constraintRight_toRightOf="@id/new_game_button"
         app:layout_constraintTop_toBottomOf="@id/new_game_button" />

@@ -1,6 +1,7 @@
 package com.mobileappdev.myapplication;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -9,8 +10,9 @@ import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
@@ -18,7 +20,6 @@ public class MainActivity extends AppCompatActivity {
     private HashMap<String, Bitmap> mSprites;
     private MineGame mGame;
     private GridLayout mGameGrid;
-    private boolean isCheating = false, firstClick = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,38 +52,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         mGame = new MineGame();
-        startGame();
     }
 
     private void startGame() {
-        isCheating = false;
-        firstClick = true;
+        mGame.newGame();
     }
 
     private boolean onButtonLongClick(View view) {
-        if(mGame.isGameOver()) {
-            return true;
-        }
-        flag(view);
         return true;
     }
 
     private void onButtonClick(View view) {
-        if(mGame.isGameOver()) {
-            return;
-        }
-
-        if(firstClick) {
-            int buttonIndex = mGameGrid.indexOfChild(view);
-            int row = buttonIndex / MineGame.GRID_HEIGHT;
-            int col = buttonIndex % MineGame.GRID_WIDTH;
-
-            mGame.newGame(row, col);
-            revealTile(view);
-            firstClick = false;
-        } else {
-            revealTile(view);
-        }
 
         int buttonIndex = mGameGrid.indexOfChild(view);
         int row = buttonIndex / MineGame.GRID_HEIGHT;
@@ -96,68 +76,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void onCheatClick(View view) {
-        if(!firstClick) {
-            cheat();
-        }
+    public void onHelpClick(View view) {
+        Intent intent = new Intent(this, HelpActivity.class);
+        startActivity(intent);
     }
 
     public void onNewGameClick(View view) {
         startGame();
+        revealGrid();
     }
 
-    public void revealTile(View view) {
-        int buttonIndex = mGameGrid.indexOfChild(view);
-        int row = buttonIndex / MineGame.GRID_HEIGHT;
-        int col = buttonIndex % MineGame.GRID_WIDTH;
 
-        if(!mGame.isFlagged(row, col)) {
-            int tileValue = mGame.getTileValue(row, col);
-            if(tileValue == 0) {
-                ImageButton gridButton = (ImageButton) mGameGrid.getChildAt(buttonIndex);
-                gridButton.setImageBitmap(getImageFromValue(tileValue));
-                mGame.setTileRevealed(row, col);
-
-                for(int i = -1; i <= 1; i++) {
-                    for(int j = -1; j <= 1; j++) {
-                        if(!(i == 0 && j == 0)) {
-                            int nRow = row + i;
-                            int nCol = col + j;
-                            if((nRow >= 0 && nCol >= 0) && (nRow < MineGame.GRID_HEIGHT && nCol < MineGame.GRID_WIDTH)) {
-                                if(mGame.isTileHidden(nRow, nCol)) {
-                                    revealTile(getButtonAt(nRow, nCol));
-                                }
-                            }
-                        }
-                    }
-                }
-            } else {
-                ImageButton gridButton = (ImageButton) mGameGrid.getChildAt(buttonIndex);
-                gridButton.setImageBitmap(getImageFromValue(tileValue));
-                mGame.setTileRevealed(row, col);
-            }
-        }
-    }
-
-    //Sets given ImageButton to a flag image
-    //This makes the button non-clickable
-    public void flag(View view) {
-        int buttonIndex = mGameGrid.indexOfChild(view);
-        int row = buttonIndex / MineGame.GRID_HEIGHT;
-        int col = buttonIndex % MineGame.GRID_WIDTH;
-
-        if(mGame.isTileHidden(row, col)) {
-            ImageButton gridButton = (ImageButton) mGameGrid.getChildAt(buttonIndex);
-
-            if(mGame.setFlag(row, col)) {
-                gridButton.setImageBitmap(mSprites.get("flag"));
-            } else {
-                gridButton.setImageBitmap(mSprites.get("unpressed"));
-            }
-        }
-    }
-
-    //Reveals the entire board
     public void revealGrid() {
         for (int buttonIndex = 0; buttonIndex < mGameGrid.getChildCount(); buttonIndex++) {
             ImageButton gridButton = (ImageButton) mGameGrid.getChildAt(buttonIndex);
@@ -202,75 +131,5 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         }
-    }
-
-    public void cheat() {
-        for (int buttonIndex = 0; buttonIndex < mGameGrid.getChildCount(); buttonIndex++) {
-            ImageButton gridButton = (ImageButton) mGameGrid.getChildAt(buttonIndex);
-            int row = buttonIndex / MineGame.GRID_HEIGHT;
-            int col = buttonIndex % MineGame.GRID_WIDTH;
-            int tileValue = mGame.getTileValue(row, col);
-
-            if(isCheating) {
-                if(mGame.isTileHidden(row, col)) {
-                    if(mGame.isFlagged(row, col)) {
-                        gridButton.setImageBitmap(mSprites.get("flag"));
-                    } else {
-                        gridButton.setImageBitmap(mSprites.get("unpressed"));
-                    }
-                } else {
-                    gridButton.setImageBitmap(getImageFromValue(tileValue));
-                }
-            } else {
-                if(mGame.isFlagged(row, col)) {
-                    gridButton.setImageBitmap(mSprites.get("flag"));
-                } else {
-                    gridButton.setImageBitmap(getImageFromValue(tileValue));
-                }
-            }
-        }
-        isCheating = !isCheating;
-    }
-
-    //Iterates through all ImageButtons, and sets them to their default state
-    public void hideGrid() {
-        for(int buttonIndex = 0; buttonIndex < mGameGrid.getChildCount(); buttonIndex++) {
-            ImageButton gridButton = (ImageButton) mGameGrid.getChildAt(buttonIndex);
-            gridButton.setImageBitmap(mSprites.get("unpressed"));
-        }
-    }
-
-    //Returns Bitmap image for given tile
-    public Bitmap getImageFromValue(int tileValue) {
-        switch (tileValue) {
-            case Tile.Mine:
-                return mSprites.get("mine");
-            case Tile.BLANK:
-                return mSprites.get("empty");
-            case 1:
-                return mSprites.get("one");
-            case 2:
-                return mSprites.get("two");
-            case 3:
-                return mSprites.get("three");
-            case 4:
-                return mSprites.get("four");
-            case 5:
-                return mSprites.get("five");
-            case 6:
-                return mSprites.get("six");
-            case 7:
-                return mSprites.get("seven");
-            case 8:
-                return mSprites.get("eight");
-            default:
-                return mSprites.get("mine_hit");
-        }
-    }
-
-    //Returns ImageButton view when given it's row and column
-    public View getButtonAt(int row, int col) {
-        int index = (row * MineGame.GRID_WIDTH) + col;
-        return mGameGrid.getChildAt(index);
     }
 }
