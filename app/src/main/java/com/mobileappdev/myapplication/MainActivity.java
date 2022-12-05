@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startGame() {
+        mGame.resetBools();
         isCheating = false;
         firstClick = true;
     }

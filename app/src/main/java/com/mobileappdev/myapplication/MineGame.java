@@ -15,10 +15,13 @@ public class MineGame {
     }
 
     public void newGame(int x, int y) {
-        gameWon = false;
-        gameLost = false;
         revealedTiles = 0;
         tileGrid = setGrid(x, y);
+    }
+
+    public void resetBools() {
+        gameWon = false;
+        gameLost = false;
     }
 
 
