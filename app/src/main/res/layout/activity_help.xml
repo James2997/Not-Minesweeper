@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.mobileappdev.myapplication.HelpActivity">
+    tools:context="com.mobileappdev.myapplication.HelpActivity"
+    android:background="@color/teal">
 
     <TextView
         android:id="@+id/instructionsTextView"
@@ -15,6 +16,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="5dp"
         android:gravity="left"
+        android:textColor="@color/white"
         android:text="@string/help_instructions"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

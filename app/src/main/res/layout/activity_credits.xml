@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.mobileappdev.myapplication.CreditsActivity">
+    tools:context="com.mobileappdev.myapplication.CreditsActivity"
+    android:background="@color/teal">
 
     <TextView
         android:id="@+id/credits"
@@ -14,6 +15,7 @@
         android:layout_margin="30dp"
         android:layout_marginTop="5dp"
         android:gravity="center_horizontal"
+        android:textColor="@color/white"
         android:text="@string/creditlist"
         android:textSize="30sp"
         app:layout_constraintLeft_toLeftOf="parent"

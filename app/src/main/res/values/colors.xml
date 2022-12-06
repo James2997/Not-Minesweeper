@@ -7,4 +7,6 @@
     <color name="red">#F00</color>
     <color name="orange">#F80</color>
     <color name="green">#0A0</color>
+    <color name="teal">#008080</color>
+    <color name="white">#FFF</color>
 </resources>

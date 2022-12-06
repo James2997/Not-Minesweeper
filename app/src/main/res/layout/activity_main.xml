@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.mobileappdev.myapplication.MainActivity">
+    tools:context="com.mobileappdev.myapplication.MainActivity"
+    android:background="@color/teal">
 
     <GridLayout
         android:id="@+id/game_grid"
@@ -23,6 +24,7 @@
     <TextView
     android:id="@+id/ScoreCount"
     android:textSize="30sp"
+        android:textColor="@color/white"
     android:layout_margin="30dp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -39,6 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:textColor="@color/white"
         android:text="@string/WL"
         app:layout_constraintTop_toBottomOf="@id/ScoreCount"
         app:layout_constraintLeft_toLeftOf="parent"
