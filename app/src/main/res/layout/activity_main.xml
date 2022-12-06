@@ -23,20 +23,46 @@
     <Button
         android:id="@+id/new_game_button"
         style="@style/GameOptionButton"
-        android:layout_marginTop="20dp"
-        android:text="@string/new_game"
         android:onClick="onNewGameClick"
+        android:text="@string/new_game"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/game_grid" />
 
     <Button
+        android:id="@+id/cheat_button"
+        style="@style/GameOptionButton"
+        android:onClick="onCheatClick"
+        android:text="@string/cheat_button"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/Custom_Game" />
+
+    <Button
+        android:id="@+id/Custom_Game"
+        style="@style/GameOptionButton"
+        android:text="@string/custom_game"
+        android:onClick="onCustomClick"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/High_Score" />
+
+    <Button
         android:id="@+id/help_button"
         style="@style/GameOptionButton"
-        android:text="@string/cheat_button"
-        android:onClick="onCheatClick"
-        app:layout_constraintLeft_toLeftOf="@id/new_game_button"
-        app:layout_constraintRight_toRightOf="@id/new_game_button"
+        android:onClick="onHelpClick"
+        android:text="@string/help"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/new_game_button" />
+
+    <Button
+        android:id="@+id/High_Score"
+        style="@style/GameOptionButton"
+        android:onClick="onHighClick"
+        android:text="@string/high_score"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/help_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

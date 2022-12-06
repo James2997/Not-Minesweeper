@@ -5,4 +5,25 @@
     <string name="nextTime">Try again next time!</string>
     <string name="light_bulb">Light bulb</string>
     <string name="cheat_button">Cheat</string>
+    <string name="custom_game">Custom Game</string>
+    <string name="help">Rules</string>
+    <string name="high_score">High Scores</string>
+    <string name="help_instructions">
+        <br>
+            1. Click a box to reveal its value. Boxes can be blank, a number value, or a mine.\n
+        </br>
+        <br>
+            2. Blank boxes reveal all other blank boxes in the area along with the numbered boxes surrounding it.\n
+        </br>
+        <br>
+            3. If you hit a mine you lose!\n
+        </br>
+        <br>
+            4. You will gain points for every numbered value box you uncover. Your points will carry on to the next game until you lose.\n
+        </br>
+    </string>
+    <string name="customp1"># of Mines: 15</string>
+    <string name="apply_button">Apply</string>
+    <string name="default_button">Default</string>
+
 </resources>

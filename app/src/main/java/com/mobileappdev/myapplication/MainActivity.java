@@ -1,9 +1,12 @@
 package com.mobileappdev.myapplication;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.app.Activity;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
@@ -11,12 +14,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
     private HashMap<String, Bitmap> mSprites;
-    private MineGame mGame;
+    public static MineGame mGame;
     private GridLayout mGameGrid;
     private boolean isCheating = false, firstClick = false;
 
@@ -101,6 +105,21 @@ public class MainActivity extends AppCompatActivity {
     public void onNewGameClick(View view) {
         hideGrid();
         startGame();
+    }
+
+    public void onCustomClick(View view) {
+        Intent intent = new Intent(this, CustomActivity.class);
+        startActivity(intent);
+    }
+
+    public void onHelpClick(View view) {
+        Intent intent = new Intent(this, HelpActivity.class);
+        startActivity(intent);
+    }
+
+    public void onHighClick(View view) {
+        Intent intent = new Intent(this, HighScoreActivity.class);
+        startActivity(intent);
     }
 
     public void revealTile(View view) {

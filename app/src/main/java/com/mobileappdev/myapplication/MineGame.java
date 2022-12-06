@@ -3,8 +3,8 @@ package com.mobileappdev.myapplication;
 import java.util.Random;
 
 public class MineGame {
-    public static final int GRID_HEIGHT = 10, GRID_WIDTH = 10;
-    public static final int totalBombs = 15;
+    public static int GRID_HEIGHT = 10, GRID_WIDTH = 10;
+    public static int totalBombs = 15;
 
     private Tile[][] tileGrid;
     private boolean gameWon, gameLost;
@@ -133,4 +133,12 @@ public class MineGame {
     public boolean isGameLost() {
         return gameLost;
     }
+
+    public int getTotalBombs() { return totalBombs; }
+    public void setTotalBombs(int n) { totalBombs = n; }
+    public int getGridHeight() { return GRID_HEIGHT; }
+    public void setGridHeight(int n) { GRID_HEIGHT = n; }
+    public int getGridWidth() { return GRID_WIDTH; }
+    public void setGridWidth(int n) { GRID_WIDTH = n; }
+
 }
