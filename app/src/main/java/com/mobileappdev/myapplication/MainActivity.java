@@ -1,7 +1,9 @@
 package com.mobileappdev.myapplication;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -23,11 +26,23 @@ public class MainActivity extends AppCompatActivity {
     public static MineGame mGame;
     private GridLayout mGameGrid;
     private boolean isCheating = false, firstClick = false;
+    private int score = 0;
+    private TextView scoreView;
+    private TextView highScoreView;
+    private TextView winLoseView;
+    public static final String Shared_Prefs = "sharedPrefs";
+    public static final String ScoreSave = "ScoreSave";
+    private int loadScore;
+    int temp = 0;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        scoreView = (TextView) findViewById(R.id.ScoreCount);
+        winLoseView = (TextView) findViewById(R.id.WLMessage);
+        highScoreView = (TextView) findViewById(R.id.highScoreViewer);
         mSprites = ImageProcessing.processSprites(BitmapFactory.decodeResource(getResources(), R.drawable.minesweeper));
 
         ActionBar.LayoutParams layout = new ActionBar.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -89,11 +104,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if(mGame.isGameWon()) {
+            //saveHighScore();
+            winLoseView.setText("Congrats you won!");
+            temp = 1;
             Toast.makeText(this, R.string.congrats, Toast.LENGTH_SHORT).show();
         } else if(mGame.isGameLost()) {
             revealGrid();
+            winLoseView.setText("Try again next time!");
+            //saveHighScore();
             Toast.makeText(this, R.string.nextTime, Toast.LENGTH_SHORT).show();
         }
+        //loadHighScore();
+        //updateViews();
     }
 
     public void onCheatClick(View view) {
@@ -104,6 +126,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void onNewGameClick(View view) {
         hideGrid();
+        if (temp == 0)
+        {
+            //highScoreView.setText(score);
+            score = 0;
+            scoreView.setText("Your Score: " + score);
+        }
+        winLoseView.setText("");
+        temp = 0;
         startGame();
     }
 
@@ -112,13 +142,8 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onHelpClick(View view) {
-        Intent intent = new Intent(this, HelpActivity.class);
-        startActivity(intent);
-    }
-
-    public void onHighClick(View view) {
-        Intent intent = new Intent(this, HighScoreActivity.class);
+    public void onMenuClick(View view) {
+        Intent intent = new Intent(this, TitleMenu.class);
         startActivity(intent);
     }
 
@@ -151,6 +176,11 @@ public class MainActivity extends AppCompatActivity {
                 ImageButton gridButton = (ImageButton) mGameGrid.getChildAt(buttonIndex);
                 gridButton.setImageBitmap(getImageFromValue(tileValue));
                 mGame.setTileRevealed(row, col);
+            }
+            if (!isCheating && tileValue != Tile.Mine && mGame.getTotalBombs() == 15)
+            {
+                score += tileValue;
+                scoreView.setText("Your Score: " + score);
             }
         }
     }
@@ -255,5 +285,25 @@ public class MainActivity extends AppCompatActivity {
     public View getButtonAt(int row, int col) {
         int index = (row * MineGame.GRID_WIDTH) + col;
         return mGameGrid.getChildAt(index);
+    }
+
+    public void saveHighScore()
+    {
+        SharedPreferences sharedPreferences = getSharedPreferences(Shared_Prefs, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putInt(ScoreSave, score);
+        editor.apply();
+    }
+
+    public void loadHighScore()
+    {
+        SharedPreferences sharedPreferences = getSharedPreferences(Shared_Prefs, MODE_PRIVATE);
+        loadScore = sharedPreferences.getInt(ScoreSave, 0);
+    }
+
+    public void updateViews()
+    {
+        scoreView.setText(loadScore);
     }
 }

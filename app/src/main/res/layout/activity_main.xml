@@ -20,6 +20,30 @@
         app:layout_constraintTop_toTopOf="parent" >
     </GridLayout>
 
+    <TextView
+    android:id="@+id/ScoreCount"
+    android:textSize="30sp"
+    android:layout_margin="30dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:text="@string/score_count"
+    app:layout_constraintTop_toBottomOf="@id/game_grid"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"/>
+
+    <TextView
+        android:id="@+id/WLMessage"
+        android:textSize="30sp"
+        android:layout_margin="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/WL"
+        app:layout_constraintTop_toBottomOf="@id/ScoreCount"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
     <Button
         android:id="@+id/new_game_button"
         style="@style/GameOptionButton"
@@ -27,16 +51,17 @@
         android:text="@string/new_game"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/game_grid" />
+        app:layout_constraintBottom_toTopOf="@id/Custom_Game" />
 
     <Button
         android:id="@+id/cheat_button"
         style="@style/GameOptionButton"
         android:onClick="onCheatClick"
         android:text="@string/cheat_button"
+        android:layout_margin="25dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/Custom_Game" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <Button
         android:id="@+id/Custom_Game"
@@ -45,24 +70,18 @@
         android:onClick="onCustomClick"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/High_Score" />
+        app:layout_constraintBottom_toTopOf="@id/cheat_button" />
 
     <Button
-        android:id="@+id/help_button"
+        android:id="@+id/menu_button"
         style="@style/GameOptionButton"
-        android:onClick="onHelpClick"
-        android:text="@string/help"
+        android:text="@string/menu"
+        android:onClick="onMenuClick"
+        android:layout_margin="25dp"
+        android:layout_width="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/new_game_button" />
+        app:layout_constraintRight_toLeftOf="@id/cheat_button"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-    <Button
-        android:id="@+id/High_Score"
-        style="@style/GameOptionButton"
-        android:onClick="onHighClick"
-        android:text="@string/high_score"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/help_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

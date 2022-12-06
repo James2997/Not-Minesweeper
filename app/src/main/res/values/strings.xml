@@ -21,9 +21,26 @@
         <br>
             4. You will gain points for every numbered value box you uncover. Your points will carry on to the next game until you lose.\n
         </br>
+        <br>
+            5. If you win the game, you can continue adding to your score with a new game until you lose.
+        </br>
     </string>
     <string name="customp1"># of Mines: 15</string>
     <string name="apply_button">Apply</string>
     <string name="default_button">Default</string>
+    <string name="custom_warning">If you press "Apply" or Default then your current game will be deleted and your points will be set to 0!</string>
+    <string name="play_button">Play</string>
+    <string name="title_card">Not Minesweeper</string>
+    <string name="credit">Credits</string>
+    <string name="creditlist">
+        <br>Creators:\n</br>
+        <br>James Pendley\n</br>
+        <br>Cristian Arriaga\n</br>
+        <br>Anthony Stovall</br>
+    </string>
+    <string name="menu">Menu</string>
+    <string name="score_count">Your Score: </string>
+    <string name="scoring">Scores:\n</string>
+    <string name="WL"></string>
 
 </resources>
